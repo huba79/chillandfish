@@ -32,11 +32,11 @@ public class RegistrationResponse  extends BaseMessage{
     private Address address;
     
     @JsonProperty("financialInfo") //TODO solve serialization issues
-    @JsonSerialize(as = Address.class)
+    @JsonSerialize(as = FinancialData.class)
     private FinancialData financialInfo;
     
     @JsonProperty("contactData") //TODO solve serialization issues
-    @JsonSerialize(as = Address.class)
+    @JsonSerialize(as = ContactData.class)
     private ContactData contactData;
 
     public void setUserId(Long userId) {

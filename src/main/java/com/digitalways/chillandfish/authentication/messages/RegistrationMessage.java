@@ -31,6 +31,9 @@ public class RegistrationMessage  extends BaseMessage{
     @JsonProperty("lastName")
     private String lastName;
 
+    @JsonProperty("displayName")
+    private String displayName;
+
     @JsonProperty("logMeIn")
     private Boolean logMeIn;
 
@@ -67,6 +70,10 @@ public class RegistrationMessage  extends BaseMessage{
     public Boolean getLogMeIn() { return logMeIn;  }
 
     public String getLastName() {  return lastName; }
+
+    public String getDisplayName() {
+        return (displayName!=null) ? this.displayName : firstName+" "+lastName;
+    }
 
     public Address getAddress() { return address; }
 

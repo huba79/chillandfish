@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.digitalways.chillandfish.authentication.persistence;
 
 import com.digitalways.chillandfish.persistence.Address;
@@ -44,11 +40,12 @@ public class User extends BaseEntity implements Serializable {
     @ManyToMany(cascade = {
         CascadeType.PERSIST,
         CascadeType.MERGE
-    })
+    },fetch = FetchType.LAZY)
     @JoinTable(
-        name = "USER_ROLES", 
-        joinColumns = { @JoinColumn(name = "USER_ID") }, 
-        inverseJoinColumns = { @JoinColumn(name = "ROLE_ID") }
+        name = "USER_ROLES",
+        joinColumns = { @JoinColumn(name = "USER_ID") },
+        inverseJoinColumns = { @JoinColumn(name = "ROLE_ID")
+        }
     )
     //listak sok delete-t generalnak, jobb valamilyen set-et hasznalni
     private List<Role> roles;
@@ -68,28 +65,30 @@ public class User extends BaseEntity implements Serializable {
     public User() {
     }
     
-    public User( String loginName, String password, List<Role> roles,String firstName, String lastName,String nickName, Long createUserId) {
-        super(createUserId);
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.displayName = nickName;
-        this.loginName = loginName;
-        this.password = password;
-        this.roles = roles;
-        this.displayName = nickName;
+    public User( String loginName, String password, List<Role> roles,
+                 String firstName, String lastName,String nickName, Long createUserId) {
+                    super(createUserId);
+                    this.firstName = firstName;
+                    this.lastName = lastName;
+                    this.displayName = nickName;
+                    this.loginName = loginName;
+                    this.password = password;
+                    this.roles = roles;
+                    this.displayName = nickName;
     }
 
-    public User(String firstName, String lastName, String loginName, String password, List<Role> roles, String nickName, Address address, ContactData contactInfo, FinancialData financialData, Long createUserId) {
-        super(createUserId);
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.loginName = loginName;
-        this.password = password;
-        this.roles = roles;
-        this.displayName = nickName;
-        this.address = address;
-        this.contactInfo = contactInfo;
-        this.financialData = financialData;
+    public User(String firstName, String lastName, String loginName,
+                String password, List<Role> roles, String nickName, Address address, ContactData contactInfo, FinancialData financialData, Long createUserId) {
+                    super(createUserId);
+                    this.firstName = firstName;
+                    this.lastName = lastName;
+                    this.loginName = loginName;
+                    this.password = password;
+                    this.roles = roles;
+                    this.displayName = nickName;
+                    this.address = address;
+                    this.contactInfo = contactInfo;
+                    this.financialData = financialData;
     }
 
     public String getFirstName() {

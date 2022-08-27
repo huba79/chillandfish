@@ -1,7 +1,4 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+
 package com.digitalways.chillandfish.persistence;
 
 import java.io.Serializable;
@@ -17,10 +14,10 @@ import javax.persistence.Table;
 @Table(name="CONTACT_DATA")
 public class ContactData extends BaseEntity implements Serializable {
     
-    @Column(name="PHONE_NR", columnDefinition="VARCHAR(24)")
+    @Column(name="PHONE_NR")
     private String phoneNr;
     
-    @Column(name="CONTACT_PERSON", columnDefinition="VARCHAR(64)")    
+    @Column(name="CONTACT_PERSON")
     private String contactPerson;
 
     public ContactData() {

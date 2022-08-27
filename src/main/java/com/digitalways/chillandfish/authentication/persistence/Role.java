@@ -7,10 +7,8 @@ package com.digitalways.chillandfish.authentication.persistence;
 import com.digitalways.chillandfish.persistence.BaseEntity;
 import java.io.Serializable;
 import java.util.List;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.ManyToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
+
 import org.hibernate.annotations.ColumnDefault;
 
 /**
@@ -20,18 +18,21 @@ import org.hibernate.annotations.ColumnDefault;
 @Entity
 @Table(name="ROLES")
 public class Role extends BaseEntity implements Serializable{
-    
+
     @Column(name="ROLE_NAME",nullable=false)
     private String roleName;
     
     @Column(name="LANG",nullable=false)   
-    @ColumnDefault("EN")
+    @ColumnDefault(value = "\'EN\'")
     private String language;
     
-    @ManyToMany(mappedBy = "roles")
-    //TODO: listak sok delete-t generalnak, jobb valamilyen set-et hasznalni
-    private List<User> users;
-    
+//    @ManyToMany(mappedBy = "roles", cascade = {
+//            CascadeType.PERSIST,
+//            CascadeType.MERGE
+//    },fetch = FetchType.LAZY)
+//    //TODO: listak sok delete-t generalnak, jobb valamilyen set-et hasznalni
+//    private List<User> users;
+
     public Role() {
     }
 
