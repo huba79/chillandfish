@@ -11,30 +11,30 @@ import javax.persistence.Table;
  * @author huba
  */
 @Entity
-@Table(name = "address")
+@Table(name = "addresses")
 public class Address extends BaseEntity implements Serializable{
-    @Column(name="ADDRESS_TYPE",columnDefinition="VARCHAR(10)")
+    @Column(name="ADDRESS_TYPE")
     private AddressTypeEnum addressType;
     
-    @Column(name="COUNTRY",columnDefinition="VARCHAR(32)")
+    @Column(name="COUNTRY")
     private String country;
 
-    @Column(name="COUNTY",columnDefinition="VARCHAR(32)")    
+    @Column(name="COUNTY")
     private String county;
     
-    @Column(name="SETTLEMENT",columnDefinition="VARCHAR(32)")    
+    @Column(name="SETTLEMENT")
     private String settlement;
     
-    @Column(name="STREET",columnDefinition="VARCHAR(32)")    
+    @Column(name="STREET")
     private String street;
     
-    @Column(name="STREET_NR",columnDefinition="INT")    
+    @Column(name="STREET_NR")
     private int nr;
     
-    @Column(name="STAIRCASE",columnDefinition="VARCHAR(32)")     
+    @Column(name="STAIRCASE")
     private int staircase;
     
-    @Column(name="APARTMENT_NR",columnDefinition="INT")     
+    @Column(name="APARTMENT_NR")
     private int apartment;
 
     public Address() {

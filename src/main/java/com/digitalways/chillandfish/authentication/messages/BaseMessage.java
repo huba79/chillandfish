@@ -10,7 +10,7 @@ package com.digitalways.chillandfish.authentication.messages;
  */
 public abstract class BaseMessage {
     
-    private String apiVersion;
+    private String apiVersion = "1.0"; //dummy init, to develop later maybe using Environment
 
     public BaseMessage() {
     }

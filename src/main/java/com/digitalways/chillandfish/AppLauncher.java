@@ -4,7 +4,6 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.ExitCodeGenerator;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 /**
  *
@@ -12,7 +11,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
  */
 @SpringBootApplication
 //@EnableJpaRepositories
-public class Chill2 implements CommandLineRunner {
+public class AppLauncher implements CommandLineRunner {
 
     @Override
     public void run(String... arg0) throws RuntimeException {
@@ -23,7 +22,7 @@ public class Chill2 implements CommandLineRunner {
 
     public static void main(String[] args) throws RuntimeException {
         try {
-            new SpringApplication(Chill2.class).run(args);
+            new SpringApplication(AppLauncher.class).run(args);
         } catch (Throwable t) {
             t.printStackTrace();
         }
@@ -40,4 +39,6 @@ public class Chill2 implements CommandLineRunner {
 
     }
 }
+
+//szoveg
 
