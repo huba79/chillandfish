@@ -10,12 +10,13 @@ import com.digitalways.chillandfish.authentication.persistence.Role;
 import com.digitalways.chillandfish.authentication.persistence.User;
 import com.digitalways.chillandfish.authentication.repositories.RoleRepository;
 import com.digitalways.chillandfish.authentication.repositories.UserRepository;
+import com.digitalways.chillandfish.persistence.ContactData;
 import com.digitalways.chillandfish.persistence.FinancialData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-
+import java.util.LinkedHashSet;
+import java.util.Set;
 /**
  *
  * @author huba
@@ -27,33 +28,55 @@ public class RegistrationService {
     @Autowired
     RoleRepository roleRepo;
 
-    public RegistrationResponse createUser(RegistrationMessage message) {
+    public RegistrationResponse createUser(RegistrationMessage message) throws RegistrationUnsuccessfulException {
 
-        if(roleRepo.findRoleByRoleName(message.getGroupName()).isPresent()) {
-            System.out.println("Processing registration info....");
-            Role role = roleRepo.findRoleByRoleName(message.getGroupName()).get();
+        System.out.println("Processing registration info....");
 
-            ArrayList<Role> roles = new ArrayList<>();
-            roles.add(role);
-            FinancialData financialData = new FinancialData(message.getCreateUserId(),message.getFinancialInfo().getBankAccountNr());
-            User savedUser = userRepo.save(
-                    new User(
-                            message.getFirstName(), message.getLastName(),
-                            message.getLoginname(),message.getPassword(),
-                            roles,
-                            message.getDisplayName(),
-                            message.getAddress(),
-                            message.getContactData(),
-                            financialData,
-                            message.getCreateUserId() )
-            );
-            System.out.println("User registered successfully!");
+        if(isValidRole(message.getGroupName())) {
+            System.out.println("The received role is valid... Checking if user exists");
+            if(doesUserExist(message)) {
+                System.out.println("Loginname already taken...");
+                System.out.println("Unsuccessful user registration! Loginname already taken.");
+                throw new RegistrationUnsuccessfulException("Unsuccessful user registration! Loginname already taken.");
+            } else {
+                //loginname is a new valid loginname
+                System.out.println("Loginname is available. Saving user...");
 
-            return new RegistrationResponse(savedUser.getId(), savedUser.getDisplayName(), savedUser.getRoles(),
-                    savedUser.getAddress(), savedUser.getFinancialData(), savedUser.getContactInfo());
+                Role role = roleRepo.findRoleByRoleName(message.getGroupName()).get();
+                ContactData contactData= (message.getContactData() ==null )? null : new ContactData(message.getContactData().getPhoneNr(),message.getContactData().getPhoneNr(), message.getCreateUserId());
+                FinancialData financialData = (message.getFinancialInfo()==null)? null: new FinancialData(message.getCreateUserId(),message.getFinancialInfo().getBankAccountNr());
+                Set <Role> roles =  new LinkedHashSet<>();
+                roles.add(roleRepo.findRoleByRoleName(message.getGroupName()).get());
+                User user =new User(
+                        message.getFirstName(), message.getLastName(),
+                        message.getLoginname(),message.getPassword(),
+                        roles, //TODO: remember to set it
+                        message.getDisplayName(),
+                        message.getAddress(),
+                        contactData,
+                        financialData,
+                        message.getCreateUserId() );
+
+
+                User savedUser = userRepo.save( user );
+                System.out.println("User registered successfully!");
+
+                return new RegistrationResponse(savedUser.getId(), savedUser.getDisplayName(), savedUser.getRoles(),
+                        savedUser.getAddress(), savedUser.getFinancialData(), savedUser.getContactInfo());
+            }
+
         }
         else {
-            System.out.println("Unsuccessful user registration!");
-            return null; } //TODO throw a business exception
+            System.out.println("Unsuccessful user registration! Invalid user group provided.");
+            throw new RegistrationUnsuccessfulException("Unsuccessful user registration! Invalid user group provided.");
+        } //TODO throw a business exception
+    }
+
+    private boolean isValidRole(String roleName){
+        return roleRepo.findRoleByRoleName(roleName).isPresent();
+    }
+
+    private boolean doesUserExist(RegistrationMessage message){
+        return userRepo.findActiveUserByLoginname(message.getLoginname()).isPresent();
     }
 }

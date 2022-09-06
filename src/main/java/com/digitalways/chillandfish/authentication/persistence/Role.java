@@ -6,7 +6,9 @@ package com.digitalways.chillandfish.authentication.persistence;
 
 import com.digitalways.chillandfish.persistence.BaseEntity;
 import java.io.Serializable;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 import javax.persistence.*;
 
 import org.hibernate.annotations.ColumnDefault;
@@ -21,19 +23,13 @@ public class Role extends BaseEntity implements Serializable{
 
     @Column(name="ROLE_NAME",nullable=false)
     private String roleName;
-    
-    @Column(name="LANG",nullable=false)   
-    @ColumnDefault(value = "\'EN\'")
-    private String language;
-    
-//    @ManyToMany(mappedBy = "roles", cascade = {
-//            CascadeType.PERSIST,
-//            CascadeType.MERGE
-//    },fetch = FetchType.LAZY)
-//    //TODO: listak sok delete-t generalnak, jobb valamilyen set-et hasznalni
-//    private List<User> users;
 
     public Role() {
+    }
+
+    public Role(Long createUserId, String roleName) {
+        super(createUserId);
+        this.roleName = roleName;
     }
 
     public Role(Long createUserId) {
@@ -47,16 +43,5 @@ public class Role extends BaseEntity implements Serializable{
     public void setRoleName(String roleName) {
         this.roleName = roleName;
     }
-
-    public String getLanguage() {
-        return language;
-    }
-
-    public void setLanguage(String language) {
-        this.language = language;
-    }
-    
-    
-    
     
 }

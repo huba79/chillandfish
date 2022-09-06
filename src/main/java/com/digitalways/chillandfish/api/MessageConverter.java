@@ -16,8 +16,8 @@ public class MessageConverter<T> {
         return new ApiResponse(businessStatus, errors, data);
     }
     
-    public T interpretMessage(ApiMessage message) {
-       return (T) message.getData();
-    }
+//    public T interpretMessage(ApiMessage message) {
+//       return (T) message.getData();
+//    }
     
 }

@@ -8,10 +8,10 @@ package com.digitalways.chillandfish.authentication.services;
  *
  * @author huba
  */
-public class GroupNotFoundException extends RuntimeException {
+public class RegistrationUnsuccessfulException extends Exception {
 
-    public GroupNotFoundException() {
-        super("Inexistent user group!");
+    public RegistrationUnsuccessfulException(String message) {
+        super(message);
     }
     
 }

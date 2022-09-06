@@ -22,17 +22,17 @@ public class AuthenticationService {
     @Autowired
     RoleRepository roleRepo;
     
-    LoginResponse doLogin(LoginMessage loginMessage){
+    LoginResponse authenticate(LoginMessage loginMessage) throws UnsuccesfulLoginException {
         try{
-            Optional foundUser = userRepo.findUserByLoginNameAndPassword(loginMessage.getLoginname(), loginMessage.getPassword());
+            Optional foundUser = userRepo.findActiveUserByDisplayNameAndPassword(loginMessage.getLoginname(), loginMessage.getPassword());
             if (foundUser.isEmpty() ) {
-                throw new UnsuccesfulLoginException();
+                throw new UnsuccesfulLoginException("Unsuccessful login! Did you provide the right credentials?");
             } else {
               String groupName = roleRepo.findRoleByRoleName(loginMessage.getGroupName()).get().getRoleName();
               if (!groupName.equals(loginMessage.getGroupName())) {
-                  throw new InexistentGroupException();
+                  throw new RegistrationUnsuccessfulException("Invalid user group provided!");
               } else {
-                  
+
 //              TODO: generate sessionID    
 //              TODO: generate security token
 //              return new LoginResponse();

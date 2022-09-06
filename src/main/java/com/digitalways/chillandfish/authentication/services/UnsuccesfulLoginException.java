@@ -9,7 +9,7 @@ package com.digitalways.chillandfish.authentication.services;
  * @author huba
  */
 public class UnsuccesfulLoginException extends RuntimeException{
-    public UnsuccesfulLoginException(){
-        super("Login Unsuccessful!");
+    public UnsuccesfulLoginException(String errorMessage){
+        super(errorMessage);
     }
 }
