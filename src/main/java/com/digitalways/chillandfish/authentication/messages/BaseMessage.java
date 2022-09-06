@@ -9,18 +9,8 @@ package com.digitalways.chillandfish.authentication.messages;
  * @author huba
  */
 public abstract class BaseMessage {
-    
-    private String apiVersion = "1.0"; //dummy init, to develop later maybe using Environment
 
     public BaseMessage() {
     }
-   
-    public BaseMessage(String apiVersion) {
-        this.apiVersion = apiVersion;
-    }
 
-    public String getApiVersion() {
-        return apiVersion;
-    }
-    
 }

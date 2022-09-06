@@ -3,12 +3,12 @@ package com.digitalways.chillandfish.authentication.rest;
 import com.digitalways.chillandfish.api.RequestValidator;
 import com.digitalways.chillandfish.authentication.messages.RegistrationResponse;
 import com.digitalways.chillandfish.authentication.messages.RegistrationMessage;
-import com.digitalways.chillandfish.api.ApiMessage;
 import com.digitalways.chillandfish.api.ApiResponse;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
+import com.digitalways.chillandfish.authentication.services.RegistrationUnsuccessfulException;
 import com.digitalways.chillandfish.authentication.services.RegistrationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -27,11 +27,10 @@ public class RegistrationController {
 
     @Autowired RegistrationService registrationService;
     @Autowired HttpServletRequest request;
-    @RequestMapping(value = "{apiVersion}/registration/",
+    @RequestMapping(value = "registration/",
     consumes = { "application/json" },
     method = RequestMethod.POST)
-    ResponseEntity<ApiResponse<RegistrationResponse>> registration(@Valid @RequestBody ApiMessage<RegistrationMessage> body,
-                                                            @PathVariable("apiVersion") String apiVersion ){
+    ResponseEntity<ApiResponse<RegistrationResponse>> registration(@Valid @RequestBody RegistrationMessage body) throws RegistrationUnsuccessfulException {
             List<String> errors = new ArrayList<>();
             if (! RequestValidator.checkApiKey(request)) {
                 errors.add("Invalid Api Key");
@@ -42,9 +41,17 @@ public class RegistrationController {
                         new ApiResponse<>("Error",errors,null),
                         HttpStatus.BAD_REQUEST) ;
             } else {
-                return new ResponseEntity<>(
-                        new ApiResponse<>("OK",null,registrationService.createUser(body.getData())),
-                        HttpStatus.CREATED) ;
+                try {
+                    return new ResponseEntity<>(
+                            new ApiResponse<>("OK", null, registrationService.createUser(body)),
+                            HttpStatus.CREATED);
+                } catch (Exception e){
+                    e.printStackTrace();
+                    errors.add(e.getMessage());
+                    return new ResponseEntity<>(
+                            new ApiResponse<>("Error", errors, null),
+                            HttpStatus.CREATED);
+                }
             }
 
     }

@@ -11,7 +11,7 @@ import com.digitalways.chillandfish.persistence.FinancialData;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
-import java.util.List;
+import java.util.Set;
 
 /**
  *
@@ -25,7 +25,7 @@ public class RegistrationResponse  extends BaseMessage{
     private String displayname;
 
     @JsonProperty("roles")
-    private List<Role> roles;
+    private Set<Role> roles;
 
     @JsonProperty("address") //TODO solve serialization issues
     @JsonSerialize(as = Address.class)
@@ -59,7 +59,7 @@ public class RegistrationResponse  extends BaseMessage{
         this.contactData = contactData;
     }
 
-    public RegistrationResponse(Long userId,String displayName, List<Role> roles,
+    public RegistrationResponse(Long userId,String displayName, Set<Role> roles,
                                  Address address, FinancialData financialInfo, ContactData contactData) {
         this.userId = userId;
         this.roles = roles;

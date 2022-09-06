@@ -1,10 +1,10 @@
-package com.example.chillandfish2;
+package com.example.chillandfish;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class Chillandfish2ApplicationTests {
+class AppLauncherTests {
 
     @Test
     void contextLoads() {

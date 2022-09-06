@@ -6,7 +6,6 @@ package com.digitalways.chillandfish.authentication.rest;
 
 import com.digitalways.chillandfish.authentication.messages.LoginResponse;
 import com.digitalways.chillandfish.authentication.messages.LoginMessage;
-import com.digitalways.chillandfish.api.ApiMessage;
 import com.digitalways.chillandfish.api.ApiResponse;
 import javax.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -24,7 +23,7 @@ public class AuthController {
         @RequestMapping(value = "login/",
         consumes = { "application/json" },
         method = RequestMethod.POST)
-    ResponseEntity<ApiResponse<LoginResponse>> login(@Valid @RequestBody ApiMessage<LoginMessage> body){
+    ResponseEntity<ApiResponse<LoginResponse>> login(@Valid @RequestBody LoginMessage body){
         return null;
     }
 }

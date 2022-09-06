@@ -7,7 +7,8 @@ import com.digitalways.chillandfish.persistence.FinancialData;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.List;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 /**
  *
@@ -25,7 +26,8 @@ public class User extends BaseEntity implements Serializable {
     @Column(name="LAST_NAME",nullable=false)
     private String lastName;
     
-    @Column(name="LOGIN_NAME",nullable=false)        
+
+    @Column(name="LOGIN_NAME",nullable=false,unique = true)
     private String loginName;
     
     @Column(name="PASSWORD",nullable=false)     
@@ -36,20 +38,7 @@ public class User extends BaseEntity implements Serializable {
 
     @Column(name="ACTIVE",nullable=false)
     private Boolean active = true;
-    
-    @ManyToMany(cascade = {
-        CascadeType.PERSIST,
-        CascadeType.MERGE
-    },fetch = FetchType.LAZY)
-    @JoinTable(
-        name = "USER_ROLES",
-        joinColumns = { @JoinColumn(name = "USER_ID") },
-        inverseJoinColumns = { @JoinColumn(name = "ROLE_ID")
-        }
-    )
-    //listak sok delete-t generalnak, jobb valamilyen set-et hasznalni
-    private List<Role> roles;
-    
+
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "address_id", referencedColumnName = "id")   
     private Address address;
@@ -62,10 +51,13 @@ public class User extends BaseEntity implements Serializable {
     @JoinColumn(name = "financial_id", referencedColumnName = "id")  
     private FinancialData financialData;
 
+    @OneToMany(orphanRemoval = true)
+    @JoinColumn(name = "user_id")
+    private Set<Role> roles = new LinkedHashSet<>();
     public User() {
     }
     
-    public User( String loginName, String password, List<Role> roles,
+    public User( String loginName, String password, Set<Role> roles,
                  String firstName, String lastName,String nickName, Long createUserId) {
                     super(createUserId);
                     this.firstName = firstName;
@@ -78,7 +70,7 @@ public class User extends BaseEntity implements Serializable {
     }
 
     public User(String firstName, String lastName, String loginName,
-                String password, List<Role> roles, String nickName, Address address, ContactData contactInfo, FinancialData financialData, Long createUserId) {
+                String password, Set<Role> roles, String nickName, Address address, ContactData contactInfo, FinancialData financialData, Long createUserId) {
                     super(createUserId);
                     this.firstName = firstName;
                     this.lastName = lastName;
@@ -155,12 +147,12 @@ public class User extends BaseEntity implements Serializable {
         this.financialData = financialData;
     }
 
-    public List<Role> getRoles() {
-        return this.roles;
+    public Set<Role> getRoles() {
+        return roles;
     }
 
-    public void setRoles(List<Role> roles) {
-        this.roles = roles;
+    public void setRoles(Set<Role> userRoles) {
+        this.roles = userRoles;
     }
 
     public Boolean getActive() {
@@ -170,4 +162,6 @@ public class User extends BaseEntity implements Serializable {
     public void setActive(Boolean active) {
         this.active = active;
     }
+
+
 }
