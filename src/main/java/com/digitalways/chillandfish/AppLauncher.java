@@ -4,13 +4,16 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.ExitCodeGenerator;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+
+import java.io.Serial;
 
 /**
  *
  * @author huba
  */
 @SpringBootApplication
-//@EnableJpaRepositories
+@EnableJpaRepositories("com.digitalways.chillandfish")
 public class AppLauncher implements CommandLineRunner {
 
     @Override
@@ -28,8 +31,9 @@ public class AppLauncher implements CommandLineRunner {
         }
     }
 
-    @SuppressWarnings("InnerClassMayBeStatic")
-    class ExitException extends RuntimeException implements ExitCodeGenerator {
+
+    static class ExitException extends RuntimeException implements ExitCodeGenerator {
+        @Serial
         private static final long serialVersionUID = 1L;
 
         @Override
@@ -40,5 +44,4 @@ public class AppLauncher implements CommandLineRunner {
     }
 }
 
-//szoveg
 
