@@ -1,6 +1,5 @@
 package com.digitalways.chillandfish.authentication.rest;
 
-import com.digitalways.chillandfish.api.RequestValidator;
 import com.digitalways.chillandfish.authentication.messages.RegistrationResponse;
 import com.digitalways.chillandfish.authentication.messages.RegistrationMessage;
 import com.digitalways.chillandfish.api.ApiResponse;
@@ -8,6 +7,7 @@ import com.digitalways.chillandfish.api.ApiResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
+import com.digitalways.chillandfish.authentication.services.AuthorizationService;
 import com.digitalways.chillandfish.authentication.services.RegistrationUnsuccessfulException;
 import com.digitalways.chillandfish.authentication.services.RegistrationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,14 +27,16 @@ public class RegistrationController {
 
     @Autowired RegistrationService registrationService;
     @Autowired HttpServletRequest request;
+    @Autowired
+    AuthorizationService authService;
     @RequestMapping(value = "registration/",
     consumes = { "application/json" },
     method = RequestMethod.POST)
     ResponseEntity<ApiResponse<RegistrationResponse>> registration(@Valid @RequestBody RegistrationMessage body) throws RegistrationUnsuccessfulException {
             List<String> errors = new ArrayList<>();
-            if (! RequestValidator.checkApiKey(request)) {
+            if (! authService.checkApiKey(request)) {
                 errors.add("Invalid Api Key");
-                if(!RequestValidator.acceptsJson(request) ) {
+                if(!authService.acceptsJson(request) ) {
                     errors.add("Invalid message format expected!");
                 }
                 return new ResponseEntity<>(

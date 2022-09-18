@@ -9,7 +9,7 @@ package com.digitalways.chillandfish.authentication.services;
  * @author huba
  */
 public class UserNotFoundException extends RuntimeException{
-    public UserNotFoundException(){
-        super("Incorrect loginname and/or password!");
+    public UserNotFoundException(String message){
+        super(message);
     }
 }

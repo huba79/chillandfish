@@ -4,13 +4,16 @@
  */
 package com.digitalways.chillandfish.authentication.services;
 
+import com.digitalways.chillandfish.authentication.messages.AuthToken;
 import com.digitalways.chillandfish.authentication.messages.LoginMessage;
 import com.digitalways.chillandfish.authentication.messages.LoginResponse;
-import com.digitalways.chillandfish.authentication.repositories.RoleRepository;
+import com.digitalways.chillandfish.authentication.persistence.Role;
+import com.digitalways.chillandfish.authentication.persistence.User;
 import com.digitalways.chillandfish.authentication.repositories.UserRepository;
-import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 /**
  *
@@ -19,29 +22,33 @@ import org.springframework.stereotype.Service;
 @Service
 public class AuthenticationService {
     @Autowired UserRepository userRepo;
-    @Autowired
-    RoleRepository roleRepo;
+    @Autowired AuthorizationService authorizationService;
     
-    LoginResponse authenticate(LoginMessage loginMessage) throws UnsuccesfulLoginException {
+    public LoginResponse login(LoginMessage loginMessage) throws UnsuccesfulLoginException {
         try{
-            Optional foundUser = userRepo.findActiveUserByDisplayNameAndPassword(loginMessage.getLoginname(), loginMessage.getPassword());
-            if (foundUser.isEmpty() ) {
-                throw new UnsuccesfulLoginException("Unsuccessful login! Did you provide the right credentials?");
-            } else {
-              String groupName = roleRepo.findRoleByRoleName(loginMessage.getGroupName()).get().getRoleName();
-              if (!groupName.equals(loginMessage.getGroupName())) {
-                  throw new RegistrationUnsuccessfulException("Invalid user group provided!");
-              } else {
+            Optional<User> foundUser = userRepo.findUserByLoginNameAndPassword(loginMessage.getLoginname(),loginMessage.getPassword());
 
-//              TODO: generate sessionID    
-//              TODO: generate security token
-//              return new LoginResponse();
-              }
+            if (foundUser.isPresent()) {
+                System.out.println("user found...");
+                User user = foundUser.get();
+                if(!user.getActive()){
+                    throw new UnsuccesfulLoginException("Unsuccesfull login. User is inactive");
+                } else {
+                    System.out.println("user is active...");
+                    if(authorizationService.confirmProvidedRole(user,loginMessage.getGroupName())){
+                        System.out.println("user role is ok...");
+                        Role foundRole=user.getRoleByRoleName(loginMessage.getGroupName());
+                        AuthToken token = authorizationService.authorize(user,foundRole);
+                        return new LoginResponse(user.getId(),user.getDisplayName(),token.getSessionId(),token.getSecurityKey());
+                    } else throw new UnsuccesfulLoginException("Unsuccesfull login. Invalid or empty role.");
+                }
             }
-        
-        } catch(Exception e){
-            e.printStackTrace();
-        }
+            } catch(Exception e){
+                e.printStackTrace();
+                throw new UnsuccesfulLoginException(e.getMessage());
+            }
         return null;
     }
+
+
 }

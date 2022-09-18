@@ -163,5 +163,12 @@ public class User extends BaseEntity implements Serializable {
         this.active = active;
     }
 
+    public Role getRoleByRoleName(String pRoleName){
+        for(Role role:this.getRoles()){
+            if(role.getRoleName().equals(pRoleName)) {
+                return role;
+            }
+        } return null;
+    }
 
 }
