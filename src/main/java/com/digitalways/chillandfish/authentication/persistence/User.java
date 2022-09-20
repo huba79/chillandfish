@@ -4,6 +4,8 @@ import com.digitalways.chillandfish.persistence.Address;
 import com.digitalways.chillandfish.persistence.BaseEntity;
 import com.digitalways.chillandfish.persistence.ContactData;
 import com.digitalways.chillandfish.persistence.FinancialData;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -32,27 +34,29 @@ public class User extends BaseEntity implements Serializable {
     
     @Column(name="PASSWORD",nullable=false)     
     private String password;
-    
+
     @Column(name="DISPLAY_NAME",nullable=false) 
     private String displayName;
 
     @Column(name="ACTIVE",nullable=false)
     private Boolean active = true;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = { CascadeType.REMOVE, CascadeType.PERSIST })
     @JoinColumn(name = "address_id", referencedColumnName = "id")   
     private Address address;
     
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = { CascadeType.REMOVE, CascadeType.PERSIST })
     @JoinColumn(name = "contact_id", referencedColumnName = "id")     
     private ContactData contactInfo;
     
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = { CascadeType.REMOVE, CascadeType.PERSIST })
     @JoinColumn(name = "financial_id", referencedColumnName = "id")  
     private FinancialData financialData;
-
-    @OneToMany(orphanRemoval = true)
-    @JoinColumn(name = "user_id")
+    @OneToMany(cascade = {CascadeType.PERSIST,CascadeType.MERGE,CascadeType.REMOVE})
+    @JoinTable(
+            name = "USERS_ROLES",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new LinkedHashSet<>();
     public User() {
     }
