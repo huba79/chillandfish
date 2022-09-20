@@ -1,6 +1,8 @@
 
 package com.digitalways.chillandfish.persistence;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -13,27 +15,28 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "addresses")
 public class Address extends BaseEntity implements Serializable{
+    @JsonProperty("addressType")
     @Column(name="ADDRESS_TYPE")
     private AddressTypeEnum addressType;
-    
+    @JsonProperty("country")
     @Column(name="COUNTRY")
     private String country;
-
+    @JsonProperty("county")
     @Column(name="COUNTY")
     private String county;
-    
+    @JsonProperty("settlement")
     @Column(name="SETTLEMENT")
     private String settlement;
-    
+    @JsonProperty("street")
     @Column(name="STREET")
     private String street;
-    
+    @JsonProperty("streetNr")
     @Column(name="STREET_NR")
     private int nr;
-    
+    @JsonProperty("staircase")
     @Column(name="STAIRCASE")
-    private int staircase;
-    
+    private String staircase;
+    @JsonProperty("apNr")
     @Column(name="APARTMENT_NR")
     private int apartment;
 
@@ -50,7 +53,7 @@ public class Address extends BaseEntity implements Serializable{
         this.nr = nr;
     }
 
-    public Address(AddressTypeEnum addressType, String country, String county, String settlement, String street, int nr, int staircase, int apartment, Long createUserId) {
+    public Address(AddressTypeEnum addressType, String country, String county, String settlement, String street, int nr, String staircase, int apartment, Long createUserId) {
         super(createUserId);
         this.addressType = addressType;
         this.country = country;
@@ -86,7 +89,7 @@ public class Address extends BaseEntity implements Serializable{
         return nr;
     }
 
-    public int getStaircase() {
+    public String getStaircase() {
         return staircase;
     }
 
@@ -118,7 +121,7 @@ public class Address extends BaseEntity implements Serializable{
         this.nr = nr;
     }
 
-    public void setStaircase(int staircase) {
+    public void setStaircase(String staircase) {
         this.staircase = staircase;
     }
 

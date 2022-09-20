@@ -15,7 +15,10 @@ public class Session implements Serializable {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinTable(
+            name = "USERS_SESSIONS",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "session_id"))
     private User user;
 
     @ManyToOne
