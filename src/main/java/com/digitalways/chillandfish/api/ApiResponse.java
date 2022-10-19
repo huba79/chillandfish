@@ -7,7 +7,6 @@ package com.digitalways.chillandfish.api;
 import java.util.List;
 
 /**
- *
  * @author huba
  */
 public class ApiResponse<T> {
@@ -49,8 +48,6 @@ public class ApiResponse<T> {
     public void setData(T data) {
         this.data = data;
     }
-    
-    
-    
-    
+
+
 }

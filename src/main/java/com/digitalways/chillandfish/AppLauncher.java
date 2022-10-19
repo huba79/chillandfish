@@ -9,19 +9,11 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import java.io.Serial;
 
 /**
- *
  * @author huba
  */
 @SpringBootApplication
 @EnableJpaRepositories("com.digitalways.chillandfish")
 public class AppLauncher implements CommandLineRunner {
-
-    @Override
-    public void run(String... arg0) throws RuntimeException {
-        if (arg0.length > 0 && arg0[0].equals("exitcode")) {
-            throw new ExitException();
-        }
-    }
 
     public static void main(String[] args) throws RuntimeException {
         try {
@@ -31,6 +23,12 @@ public class AppLauncher implements CommandLineRunner {
         }
     }
 
+    @Override
+    public void run(String... arg0) throws RuntimeException {
+        if (arg0.length > 0 && arg0[0].equals("exitcode")) {
+            throw new ExitException();
+        }
+    }
 
     static class ExitException extends RuntimeException implements ExitCodeGenerator {
         @Serial

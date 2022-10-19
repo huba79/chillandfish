@@ -1,23 +1,21 @@
-
 package com.digitalways.chillandfish.persistence;
 
-import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import java.io.Serializable;
 
 /**
- *
  * @author huba
  */
 @Entity
-@Table(name="CONTACT_DATA")
+@Table(name = "CONTACT_DATA")
 public class ContactData extends BaseEntity implements Serializable {
-    
-    @Column(name="PHONE_NR")
+
+    @Column(name = "PHONE_NR")
     private String phoneNr;
-    
-    @Column(name="CONTACT_PERSON")
+
+    @Column(name = "CONTACT_PERSON")
     private String contactPerson;
 
     public ContactData() {
@@ -45,5 +43,5 @@ public class ContactData extends BaseEntity implements Serializable {
     public void setContactPerson(String contactPerson) {
         this.contactPerson = contactPerson;
     }
-    
+
 }

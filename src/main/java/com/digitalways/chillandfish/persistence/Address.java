@@ -1,43 +1,41 @@
-
 package com.digitalways.chillandfish.persistence;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import java.io.Serializable;
 
 /**
- *
  * @author huba
  */
 @Entity
 @Table(name = "addresses")
-public class Address extends BaseEntity implements Serializable{
+public class Address extends BaseEntity implements Serializable {
     @JsonProperty("addressType")
-    @Column(name="ADDRESS_TYPE")
+    @Column(name = "ADDRESS_TYPE")
     private AddressTypeEnum addressType;
     @JsonProperty("country")
-    @Column(name="COUNTRY")
+    @Column(name = "COUNTRY")
     private String country;
     @JsonProperty("county")
-    @Column(name="COUNTY")
+    @Column(name = "COUNTY")
     private String county;
     @JsonProperty("settlement")
-    @Column(name="SETTLEMENT")
+    @Column(name = "SETTLEMENT")
     private String settlement;
     @JsonProperty("street")
-    @Column(name="STREET")
+    @Column(name = "STREET")
     private String street;
     @JsonProperty("streetNr")
-    @Column(name="STREET_NR")
+    @Column(name = "STREET_NR")
     private int nr;
     @JsonProperty("staircase")
-    @Column(name="STAIRCASE")
+    @Column(name = "STAIRCASE")
     private String staircase;
     @JsonProperty("apNr")
-    @Column(name="APARTMENT_NR")
+    @Column(name = "APARTMENT_NR")
     private int apartment;
 
     public Address() {
@@ -69,60 +67,60 @@ public class Address extends BaseEntity implements Serializable{
         return addressType;
     }
 
-    public String getCountry() {
-        return country;
-    }
-
-    public String getCounty() {
-        return county;
-    }
-
-    public String getSettlement() {
-        return settlement;
-    }
-
-    public String getStreet() {
-        return street;
-    }
-
-    public int getNr() {
-        return nr;
-    }
-
-    public String getStaircase() {
-        return staircase;
-    }
-
-    public int getApartment() {
-        return apartment;
-    }
-
     public void setAddressType(AddressTypeEnum addressType) {
         this.addressType = addressType;
+    }
+
+    public String getCountry() {
+        return country;
     }
 
     public void setCountry(String country) {
         this.country = country;
     }
 
+    public String getCounty() {
+        return county;
+    }
+
     public void setCounty(String county) {
         this.county = county;
+    }
+
+    public String getSettlement() {
+        return settlement;
     }
 
     public void setSettlement(String settlement) {
         this.settlement = settlement;
     }
 
+    public String getStreet() {
+        return street;
+    }
+
     public void setStreet(String street) {
         this.street = street;
+    }
+
+    public int getNr() {
+        return nr;
     }
 
     public void setNr(int nr) {
         this.nr = nr;
     }
 
+    public String getStaircase() {
+        return staircase;
+    }
+
     public void setStaircase(String staircase) {
         this.staircase = staircase;
+    }
+
+    public int getApartment() {
+        return apartment;
     }
 
     public void setApartment(int apartment) {
@@ -130,6 +128,4 @@ public class Address extends BaseEntity implements Serializable{
     }
 
 
-
-  
 }
