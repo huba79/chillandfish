@@ -1,43 +1,41 @@
-
 package com.digitalways.chillandfish.persistence;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import java.io.Serializable;
 
 /**
- *
  * @author huba
  */
 @Entity
 @Table(name = "addresses")
-public class Address extends BaseEntity implements Serializable{
+public class Address extends BaseEntity implements Serializable {
     @JsonProperty("addressType")
-    @Column(name="ADDRESS_TYPE")
+    @Column(name = "ADDRESS_TYPE")
     private AddressTypeEnum addressType;
     @JsonProperty("country")
-    @Column(name="COUNTRY")
+    @Column(name = "COUNTRY")
     private String country;
     @JsonProperty("county")
-    @Column(name="COUNTY")
+    @Column(name = "COUNTY")
     private String county;
     @JsonProperty("settlement")
-    @Column(name="SETTLEMENT")
+    @Column(name = "SETTLEMENT")
     private String settlement;
     @JsonProperty("street")
-    @Column(name="STREET")
+    @Column(name = "STREET")
     private String street;
     @JsonProperty("streetNr")
-    @Column(name="STREET_NR")
+    @Column(name = "STREET_NR")
     private int nr;
     @JsonProperty("staircase")
-    @Column(name="STAIRCASE")
+    @Column(name = "STAIRCASE")
     private String staircase;
     @JsonProperty("apNr")
-    @Column(name="APARTMENT_NR")
+    @Column(name = "APARTMENT_NR")
     private int apartment;
 
     public Address() {
@@ -130,6 +128,4 @@ public class Address extends BaseEntity implements Serializable{
     }
 
 
-
-  
 }

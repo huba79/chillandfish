@@ -2,20 +2,19 @@ package com.digitalways.chillandfish.persistence;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import java.io.Serializable;
 
 /**
- *
  * @author huba
  */
 @Entity
-@Table(name="financial_data")
+@Table(name = "financial_data")
 public class FinancialData extends BaseEntity implements Serializable {
 
-    @Column(name="ACCOUNT_NR")
+    @Column(name = "ACCOUNT_NR")
     @JsonProperty("bankAccountNr")
     private String bankAccountNr;
 
@@ -23,7 +22,9 @@ public class FinancialData extends BaseEntity implements Serializable {
         super(createUserId);
         this.bankAccountNr = bankAccountNr;
     }
-    public FinancialData(){}
+
+    public FinancialData() {
+    }
 
     public String getBankAccountNr() {
         return bankAccountNr;

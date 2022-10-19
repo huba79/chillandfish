@@ -1,4 +1,3 @@
-
 package com.digitalways.chillandfish.persistence;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -7,37 +6,33 @@ import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.LastModifiedBy;
 
+import javax.persistence.*;
 import java.time.LocalDateTime;
-import javax.persistence.Id;
-import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.MappedSuperclass;
 
 
 /**
- *
  * @author huba
  */
 @MappedSuperclass
 public abstract class BaseEntity {
-    
-    private @Id @GeneratedValue(strategy=GenerationType.AUTO)
+
+    private @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     Long id;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")
-    @Column(name="created_on", nullable = false)
+    @Column(name = "created_on", nullable = false)
     @CreationTimestamp
     final private LocalDateTime createdDate = LocalDateTime.now();
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")
-    @Column(name="modified_on")
+    @Column(name = "modified_on")
     @UpdateTimestamp
     private LocalDateTime modifyDate;
-    
-    @Column(name="created_by",nullable = false)
+
+    @Column(name = "created_by", nullable = false)
     @CreatedBy
     private Long createUserId;
-    
-    @Column(name="modified_by",nullable=false)
+
+    @Column(name = "modified_by", nullable = false)
     @LastModifiedBy
     private Long modifyUserId;
 
@@ -47,7 +42,7 @@ public abstract class BaseEntity {
 
     public BaseEntity() {
     }
-    
+
     public Long getId() {
         return id;
     }
@@ -72,5 +67,5 @@ public abstract class BaseEntity {
     public Long getModifyUserId() {
         return modifyUserId;
     }
-    
+
 }

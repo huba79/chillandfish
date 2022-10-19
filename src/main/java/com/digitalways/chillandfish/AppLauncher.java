@@ -9,7 +9,6 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import java.io.Serial;
 
 /**
- *
  * @author huba
  */
 @SpringBootApplication
