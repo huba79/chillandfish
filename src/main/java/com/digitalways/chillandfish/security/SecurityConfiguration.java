@@ -12,6 +12,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.DelegatingPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -28,31 +29,40 @@ public class SecurityConfiguration {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         Logger.getLogger("securityLogger").log(Level.INFO, "Entering FilterChain. ");
-        http.csrf().disable()
-                .authorizeRequests().antMatchers("/public/*")
-                .anonymous()
+        http.csrf()
+                .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()) //experimenting, re-add disable to revoke
+//                .disable()
+//defining freebie paths
                 .and()
-                .authorizeRequests()
-//                .antMatchers("/protected/*").hasAnyRole("USER", "ADMIN")
-                .antMatchers("/admin/*").hasRole("ADMIN")
-                .anyRequest()
-                .authenticated()
-//                .and()
-//                .exceptionHandling().accessDeniedPage("/403")
+                    .authorizeRequests()
+                        .antMatchers("/public/**")
+                        .permitAll()
+//    replaced by endpoint authorization
+//                    .anonymous()
+//                    .and()
+//                    .authorizeRequests()
+//                        .antMatchers("/protected/*")
+//                            .hasAnyRole("USER", "ADMIN")
+//                        .antMatchers("/admin/**")
+//                            .hasRole("ADMIN")
+                    .anyRequest()
+                    .authenticated()
+    //          .and()
+    //                .exceptionHandling().accessDeniedPage("/403")
                 .and()
-                .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                    .sessionManagement()
+                    .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
-                .httpBasic();
+                    .httpBasic();
         Logger.getLogger("securityLogger").log(Level.INFO, "Exiting FilterChain. ");
         return http.build();
     }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-        String idForEncode = "bcrypt";
-        Map<String, PasswordEncoder> encoders = new HashMap<>();
-        encoders.put(idForEncode, new BCryptPasswordEncoder());
+            String idForEncode = "bcrypt";
+            Map<String, PasswordEncoder> encoders = new HashMap<>();
+            encoders.put(idForEncode, new BCryptPasswordEncoder());
         return new DelegatingPasswordEncoder(idForEncode, encoders);
     }
 

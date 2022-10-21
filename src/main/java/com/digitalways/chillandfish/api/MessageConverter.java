@@ -7,12 +7,8 @@ import java.util.List;
  * @author huba
  */
 public class MessageConverter<T> {
-    public ApiResponse<T> convertToResponse(T data, String businessStatus, List<String> errors) {
+    public ApiResponse<T> messageToResponse(T data, String businessStatus, List<String> errors) {
         return new ApiResponse<T>(businessStatus, errors, data);
     }
-
-//    public T interpretMessage(ApiMessage message) {
-//       return (T) message.getData();
-//    }
 
 }
