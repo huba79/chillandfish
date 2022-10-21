@@ -5,7 +5,7 @@ import com.digitalways.chillandfish.persistence.Role;
 import com.digitalways.chillandfish.persistence.Session;
 import com.digitalways.chillandfish.persistence.User;
 import com.digitalways.chillandfish.repositories.SessionRepository;
-import com.digitalways.chillandfish.security.exceptions.LoginUnsuccesfulException;
+import com.digitalways.chillandfish.security.exceptions.LoginUnsuccessfulException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -50,8 +50,7 @@ public class RequestValidatorService {
         boolean isRoleValid = false;
         for (Role role : user.getRoles()) {
             if (role.getRoleName().equals(providedRoleName)) {
-                isRoleValid = true;
-                return isRoleValid;
+                return true;
             }
         }
         return isRoleValid;
@@ -67,9 +66,9 @@ public class RequestValidatorService {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            throw new LoginUnsuccesfulException(e.getMessage());
+            throw new LoginUnsuccessfulException(e.getMessage());
         }
-        throw new LoginUnsuccesfulException("Login unsuccessful. No role provided.");
+        throw new LoginUnsuccessfulException("Login unsuccessful. No role provided.");
     }
 
 //    public AuthToken refresh(Long userId, String roleName, AuthToken oldToken){

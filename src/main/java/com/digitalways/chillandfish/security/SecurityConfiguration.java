@@ -21,7 +21,7 @@ import java.util.logging.Logger;
 @Configuration
 @EnableWebSecurity
 // it remains to see if we really need EnableWebSecurity in api only phase,
-//migth be needed during web backoffice development
+//might be needed during web backoffice development
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfiguration {
 

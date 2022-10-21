@@ -9,7 +9,7 @@ import com.digitalways.chillandfish.persistence.Role;
 import com.digitalways.chillandfish.persistence.User;
 import com.digitalways.chillandfish.repositories.RoleRepository;
 import com.digitalways.chillandfish.repositories.UserRepository;
-import com.digitalways.chillandfish.security.exceptions.LoginUnsuccesfulException;
+import com.digitalways.chillandfish.security.exceptions.LoginUnsuccessfulException;
 import com.digitalways.chillandfish.security.exceptions.RegistrationUnsuccessfulException;
 import com.digitalways.chillandfish.security.exceptions.UserNotFoundException;
 import com.digitalways.chillandfish.utils.Converter;
@@ -92,7 +92,7 @@ public class UsersService implements Converter<Role>, UserDetailsService {
         return userRepo.findActiveUserByLoginname(message.getLoginname()).isPresent();
     }
 
-    public UserResponse getUserById(Long userId) throws LoginUnsuccesfulException {
+    public UserResponse getUserById(Long userId) throws LoginUnsuccessfulException {
         try {
             Optional<User> savedUser = userRepo.findById(userId);
             if (savedUser.isPresent()) {

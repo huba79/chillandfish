@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.digitalways.chillandfish.repositories;
 
 import com.digitalways.chillandfish.persistence.User;
@@ -26,7 +22,7 @@ public class CustomUserRepositoryImpl implements CustomUserRepository {
         Query query = entityManager.createNativeQuery(queryString, User.class);
         query.setParameter(1, pLoginName);
         query.setParameter(2, pPassword);
-        Optional<User> empty = Optional.empty();
+        //Optional<User> empty = Optional.empty();
         return (Optional<User>) query.getResultList().stream().findFirst();
     }
 
@@ -35,11 +31,10 @@ public class CustomUserRepositoryImpl implements CustomUserRepository {
         String queryString = "SELECT * FROM USERS WHERE ACTIVE = TRUE AND LOGIN_NAME = ?1";
         Query query = entityManager.createNativeQuery(queryString, User.class);
         query.setParameter(1, pLoginName);
-        Optional<User> empty = Optional.empty();
-        //TODO: handle
-        return (Optional<User>) query.getResultList().stream().findFirst();
+        //Optional<User> empty = Optional.empty();
+        //TODO: handle (Optional<User>)
+        return  query.getResultList().stream().findFirst();
     }
-
 
     //custom method implementations
 
