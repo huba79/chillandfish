@@ -121,7 +121,7 @@ public class UsersService implements Converter<Role>, UserDetailsService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public User loadUserByUsername(String username) throws UsernameNotFoundException {
         return userRepo.findActiveUserByLoginname(username).orElseThrow(() -> new NoSuchElementException("Bad credentials!"));
     }
 

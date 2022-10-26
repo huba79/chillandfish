@@ -1,23 +1,21 @@
-package com.digitalways.chillandfish.security;
+package com.digitalways.chillandfish.messages;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.io.Serializable;
 
-public class JwtRequest implements Serializable {
+public class AuthenticationMessage implements Serializable {
 
     private static final long serialVersionUID = 5926468583005150707L;
 
+    @JsonProperty("userName")
     private String username;
+    @JsonProperty("password")
     private String password;
 
+    public AuthenticationMessage() {}
 
-
-    //need default constructor for JSON Parsing
-    public JwtRequest()
-    {
-
-    }
-
-    public JwtRequest(String username, String password) {
+    public AuthenticationMessage(String username, String password) {
         this.setUsername(username);
         this.setPassword(password);
     }

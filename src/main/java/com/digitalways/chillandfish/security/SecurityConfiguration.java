@@ -1,5 +1,6 @@
 package com.digitalways.chillandfish.security;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -12,6 +13,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.DelegatingPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 
 import java.util.HashMap;
@@ -25,6 +27,11 @@ import java.util.logging.Logger;
 //might be needed during web backoffice development
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfiguration {
+    @Autowired
+    JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+
+    @Autowired
+    JwtRequestFilter jwtRequestFilter;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -37,23 +44,9 @@ public class SecurityConfiguration {
                     .authorizeRequests()
                         .antMatchers("/public/**")
                         .permitAll()
-//    replaced by endpoint authorization
-//                    .anonymous()
-//                    .and()
-//                    .authorizeRequests()
-//                        .antMatchers("/protected/*")
-//                            .hasAnyRole("USER", "ADMIN")
-//                        .antMatchers("/admin/**")
-//                            .hasRole("ADMIN")
-                    .anyRequest()
-                    .authenticated()
-    //          .and()
-    //                .exceptionHandling().accessDeniedPage("/403")
-                .and()
-                    .sessionManagement()
-                    .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
-                    .httpBasic();
+                .and().exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint).
+                and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).
+                and().addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
         Logger.getLogger("securityLogger").log(Level.INFO, "Exiting FilterChain. ");
         return http.build();
     }

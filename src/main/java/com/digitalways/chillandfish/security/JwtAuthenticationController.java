@@ -1,10 +1,12 @@
 package com.digitalways.chillandfish.security;
 
+import com.digitalways.chillandfish.messages.AuthenticationJwtResponse;
+import com.digitalways.chillandfish.messages.AuthenticationMessage;
+import com.digitalways.chillandfish.persistence.User;
 import com.digitalways.chillandfish.services.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.*;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,18 +31,18 @@ public class JwtAuthenticationController {
     Logger logger = Logger.getLogger(JwtRequestFilter.class.getName());
 
     @RequestMapping(value = "/authenticate", method = RequestMethod.POST)
-    public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtRequest authenticationRequest) throws Exception {
+    public ResponseEntity<?> createAuthenticationToken(@RequestBody AuthenticationMessage authenticationRequest) throws Exception {
         logger.log(Level.INFO,"Trying to authenticate...");
         authenticate(authenticationRequest.getUsername(), authenticationRequest.getPassword());
         logger.log(Level.INFO,"Authentication successful...");
-        final UserDetails userDetails = usersService
+        final User user = usersService
                 .loadUserByUsername(authenticationRequest.getUsername());
         logger.log(Level.INFO,"User successfully identified...");
 
-        final String token = jwtTokenUtil.generateToken(userDetails);
+        final String token = jwtTokenUtil.generateToken(user);
         logger.log(Level.INFO,"Token generated...returning response...");
 
-        return ResponseEntity.ok(new JwtResponse(token));
+        return ResponseEntity.ok(new AuthenticationJwtResponse(token));
     }
 
     private void authenticate(String username, String password) throws Exception {
