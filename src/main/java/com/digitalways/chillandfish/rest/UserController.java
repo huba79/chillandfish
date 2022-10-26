@@ -21,11 +21,12 @@ import java.util.logging.Logger;
 public class UserController {
     @Autowired
     UsersService usersService;
+    private final Logger logger = Logger.getLogger(UserController.class.getName());
 
     @RequestMapping(value = "protected/users/{id}", method = RequestMethod.GET)
     @PreAuthorize("hasAnyRole('ROLE_ADMINS','ROLE_USERS')")
     ResponseEntity<ApiResponse<User>> getUserById(@PathVariable Long id) {
-        Logger.getLogger("usersApiGetLogger").log(Level.INFO, "GetUser By Id: " + id.toString() + " called....");
+        logger.log(Level.INFO, "GetUser By Id: " + id.toString() + " called....");
         try {
             UserResponse userResponse = usersService.getUserById(id);
             if (userResponse != null)
@@ -33,11 +34,10 @@ public class UserController {
             else
                 return new ResponseEntity<>(new ApiResponse("OK", null, usersService.getUserById(id)), HttpStatus.NO_CONTENT);
         } catch (RuntimeException r) {
-            Logger.getLogger("usersApiGetLogger").log(Level.INFO, "GetUser By Id: " + id + " failed....");
+            logger.log(Level.INFO, "GetUser By Id: " + id + " failed....");
             r.printStackTrace();
             throw new UserNotFoundException(r.getMessage());
         }
-
     }
     @PreAuthorize("hasRole('ROLE_ADMINS')")
     @RequestMapping(value = "admin/dummy", method = RequestMethod.POST,

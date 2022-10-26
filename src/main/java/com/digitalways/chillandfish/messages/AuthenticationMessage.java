@@ -2,13 +2,14 @@ package com.digitalways.chillandfish.messages;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 public class AuthenticationMessage implements Serializable {
-
+    @Serial
     private static final long serialVersionUID = 5926468583005150707L;
 
-    @JsonProperty("userName")
+    @JsonProperty("username")
     private String username;
     @JsonProperty("password")
     private String password;

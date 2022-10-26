@@ -14,7 +14,6 @@ import org.springframework.security.crypto.password.DelegatingPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -28,26 +27,32 @@ import java.util.logging.Logger;
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfiguration {
     @Autowired
-    JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
-
+    AuthenticationErrorHandler authenticationErrorHandler;
     @Autowired
     JwtRequestFilter jwtRequestFilter;
 
+    Logger logger = Logger.getLogger(SecurityConfiguration.class.getName());
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        Logger.getLogger("securityLogger").log(Level.INFO, "Entering FilterChain. ");
-        http.csrf()
-                .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()) //experimenting, re-add disable to revoke
-//                .disable()
-//defining freebie paths
-                .and()
-                    .authorizeRequests()
-                        .antMatchers("/public/**")
-                        .permitAll()
-                .and().exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint).
-                and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).
-                and().addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
-        Logger.getLogger("securityLogger").log(Level.INFO, "Exiting FilterChain. ");
+        logger.log(Level.INFO, "Entering FilterChain. ");
+
+        http
+            .csrf().disable()
+//      set up csrf protection
+//         .csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()).and()
+                .authorizeRequests()
+                .antMatchers("/public/**")
+                .permitAll()
+            .and()
+                .exceptionHandling().authenticationEntryPoint(authenticationErrorHandler)
+            .and()
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+            .and()
+                .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class)
+
+                ;
+
+        logger.log(Level.INFO, "Exiting FilterChain. ");
         return http.build();
     }
 

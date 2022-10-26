@@ -30,8 +30,7 @@ public class RegistrationController {
     UsersService usersService;
     @Autowired
     HttpServletRequest request;
-    @Autowired
-    RequestValidatorService validatorService;
+    Logger logger = Logger.getLogger("RegistrationController");
 
     @PostMapping(value = "public/registration/", produces = APPLICATION_JSON_VALUE)
         //@PreAuthorize("hasAnyRole('USER', 'ADMIN')")
@@ -39,17 +38,8 @@ public class RegistrationController {
         List<String> errors = new ArrayList<>();
         Logger.getLogger("registrationLogger").log(Level.INFO, "Authentication:.." + request.getAuthType() + "\n");
 
-        if (!validatorService.checkApiKey(request)) {
-            errors.add("Invalid Api Key");
-            if (!validatorService.acceptsJson(request)) {
-                errors.add("Invalid message format expected!");
-            }
-            return new ResponseEntity<>(
-                    new ApiResponse<>("Error", errors, null),
-                    HttpStatus.BAD_REQUEST);
-        } else {
             try {
-                Logger.getLogger("registrationLogger").log(Level.INFO, "Message body:..." + body);
+                logger.log(Level.FINEST, "Message body:..." + body);
                 return new ResponseEntity<>(
                         new ApiResponse<>("OK", null, usersService.createUser(body)),
                         HttpStatus.CREATED);
@@ -60,7 +50,7 @@ public class RegistrationController {
                         new ApiResponse<>("Error", errors, null),
                         HttpStatus.CONFLICT);
             }
-        }
+
 
     }
 }

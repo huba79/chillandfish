@@ -1,17 +1,14 @@
-package com.digitalways.chillandfish.security;
+package com.digitalways.chillandfish.rest;
 
 import com.digitalways.chillandfish.messages.AuthenticationJwtResponse;
 import com.digitalways.chillandfish.messages.AuthenticationMessage;
 import com.digitalways.chillandfish.persistence.User;
+import com.digitalways.chillandfish.security.JwtTokenUtil;
 import com.digitalways.chillandfish.services.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.*;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -20,7 +17,6 @@ import java.util.logging.Logger;
 @RestController
 @CrossOrigin
 public class JwtAuthenticationController {
-
     @Autowired
     private AuthenticationManager authenticationManager;
     @Autowired
@@ -28,19 +24,20 @@ public class JwtAuthenticationController {
     @Autowired
     private UsersService usersService;
 
-    Logger logger = Logger.getLogger(JwtRequestFilter.class.getName());
+    Logger logger = Logger.getLogger(JwtAuthenticationController.class.getName());
 
-    @RequestMapping(value = "/authenticate", method = RequestMethod.POST)
+    @RequestMapping(value = "/public/authenticate", method = RequestMethod.POST)
     public ResponseEntity<?> createAuthenticationToken(@RequestBody AuthenticationMessage authenticationRequest) throws Exception {
         logger.log(Level.INFO,"Trying to authenticate...");
+
         authenticate(authenticationRequest.getUsername(), authenticationRequest.getPassword());
         logger.log(Level.INFO,"Authentication successful...");
-        final User user = usersService
-                .loadUserByUsername(authenticationRequest.getUsername());
+
+        final User user = usersService.loadUserByUsername(authenticationRequest.getUsername());
         logger.log(Level.INFO,"User successfully identified...");
 
         final String token = jwtTokenUtil.generateToken(user);
-        logger.log(Level.INFO,"Token generated...returning response...");
+        logger.log(Level.INFO,"Token generated: "+token+" , returning response...");
 
         return ResponseEntity.ok(new AuthenticationJwtResponse(token));
     }

@@ -1,21 +1,19 @@
 package com.digitalways.chillandfish.security;
 
+import com.digitalways.chillandfish.persistence.User;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+
 import java.io.Serializable;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
+import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import com.digitalways.chillandfish.persistence.User;
-import com.digitalways.chillandfish.rest.RegistrationController;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.stereotype.Component;
-
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 
 @Component
 public class JwtTokenUtil implements Serializable {
@@ -25,7 +23,7 @@ public class JwtTokenUtil implements Serializable {
     @Value("${jwt.secret}")
     private String secret;
     @Value("${jwt.expiredInS}")
-    private Long expiredInMs;
+    private Long expiredInS;
 
     //retrieve username from jwt token
     public String getUsernameFromToken(String token) {
@@ -34,6 +32,7 @@ public class JwtTokenUtil implements Serializable {
 
     //retrieve expiration date from jwt token
     public Date getExpirationDateFromToken(String token) {
+        logger.log(Level.INFO,"Extracting expiration date...");
         return getClaimFromToken(token, Claims::getExpiration);
     }
 
@@ -43,18 +42,22 @@ public class JwtTokenUtil implements Serializable {
     }
     //for retrieveing any information from token we will need the secret key
     private Claims getAllClaimsFromToken(String token) {
+        logger.log(Level.INFO,"Extracting claims...");
         return Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody();
     }
 
     //check if the token has expired
     private Boolean isTokenExpired(String token) {
         final Date expiration = getExpirationDateFromToken(token);
+        String result = expiration.before(new Date())?"Expired":"Still valid";
+        logger.info("Validating expiration date:..."+result);
         return expiration.before(new Date());
     }
 
     //generate token for user
     public String generateToken(User user) {
         Map<String, Object> claims = new HashMap<>();
+        claims.put("roles",user.getAuthorities());
         return doGenerateToken(claims, user.getUsername());
     }
 
@@ -65,12 +68,13 @@ public class JwtTokenUtil implements Serializable {
     //   compaction of the JWT to a URL-safe string
     private String doGenerateToken(Map<String, Object> claims, String subject) {
 
-        return Jwts.builder().setClaims(claims).setSubject(subject).setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + expiredInMs * 1000))
+        return Jwts.builder().setClaims(claims)
+                    .setSubject(subject)
+                    .setIssuedAt(new Date(System.currentTimeMillis()))
+                    .setExpiration(new Date(System.currentTimeMillis() + expiredInS * 1000))
                 .signWith(SignatureAlgorithm.HS512, secret).compact();
     }
 
-    //validate token
     public Boolean validateToken(String token, User user) {
         final String username = getUsernameFromToken(token);
         return (username.equals(user.getUsername()) && !isTokenExpired(token));
