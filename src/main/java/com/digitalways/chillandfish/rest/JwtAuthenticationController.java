@@ -24,7 +24,7 @@ public class JwtAuthenticationController {
     @Autowired
     private UsersService usersService;
 
-    Logger logger = Logger.getLogger(JwtAuthenticationController.class.getName());
+    final Logger logger = Logger.getLogger(JwtAuthenticationController.class.getName());
 
     @RequestMapping(value = "/public/authenticate", method = RequestMethod.POST)
     public ResponseEntity<?> createAuthenticationToken(@RequestBody AuthenticationMessage authenticationRequest) throws Exception {

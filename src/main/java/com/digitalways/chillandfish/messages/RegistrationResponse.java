@@ -12,6 +12,7 @@ import java.util.Set;
 /**
  * @author huba
  */
+@SuppressWarnings({"FieldCanBeLocal", "FieldMayBeFinal", "CanBeFinal"})
 public class RegistrationResponse extends BaseMessage {
 
     @JsonProperty("userId")
@@ -19,6 +20,7 @@ public class RegistrationResponse extends BaseMessage {
     @JsonProperty("displayname")
     private String displayname;
 
+    @SuppressWarnings("FieldCanBeLocal")
     @JsonProperty("roles")
     private Set<Role> roles;
 

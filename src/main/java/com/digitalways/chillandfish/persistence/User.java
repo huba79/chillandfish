@@ -11,6 +11,7 @@ import java.util.*;
 /**
  * @author huba
  */
+@SuppressWarnings("UnusedAssignment")
 @Entity
 @Table(name = "USERS")
 public class User extends BaseEntity implements Serializable, UserDetails {

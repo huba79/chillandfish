@@ -14,7 +14,6 @@ import com.digitalways.chillandfish.security.exceptions.RegistrationUnsuccessful
 import com.digitalways.chillandfish.security.exceptions.UserNotFoundException;
 import com.digitalways.chillandfish.utils.Converter;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;

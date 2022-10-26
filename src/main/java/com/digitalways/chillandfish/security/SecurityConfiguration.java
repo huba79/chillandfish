@@ -31,7 +31,7 @@ public class SecurityConfiguration {
     @Autowired
     JwtRequestFilter jwtRequestFilter;
 
-    Logger logger = Logger.getLogger(SecurityConfiguration.class.getName());
+    final Logger logger = Logger.getLogger(SecurityConfiguration.class.getName());
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         logger.log(Level.INFO, "Entering FilterChain. ");

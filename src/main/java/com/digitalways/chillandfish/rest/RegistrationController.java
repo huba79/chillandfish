@@ -3,7 +3,6 @@ package com.digitalways.chillandfish.rest;
 import com.digitalways.chillandfish.api.ApiResponse;
 import com.digitalways.chillandfish.messages.RegistrationMessage;
 import com.digitalways.chillandfish.messages.RegistrationResponse;
-import com.digitalways.chillandfish.security.RequestValidatorService;
 import com.digitalways.chillandfish.services.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -30,7 +29,7 @@ public class RegistrationController {
     UsersService usersService;
     @Autowired
     HttpServletRequest request;
-    Logger logger = Logger.getLogger("RegistrationController");
+    final Logger logger = Logger.getLogger("RegistrationController");
 
     @PostMapping(value = "public/registration/", produces = APPLICATION_JSON_VALUE)
         //@PreAuthorize("hasAnyRole('USER', 'ADMIN')")

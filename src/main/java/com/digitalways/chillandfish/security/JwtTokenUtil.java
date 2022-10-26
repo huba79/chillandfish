@@ -18,7 +18,7 @@ import java.util.logging.Logger;
 @Component
 public class JwtTokenUtil implements Serializable {
 
-    Logger logger = Logger.getLogger(JwtTokenUtil.class.getName());
+    final Logger logger = Logger.getLogger(JwtTokenUtil.class.getName());
 
     @Value("${jwt.secret}")
     private String secret;

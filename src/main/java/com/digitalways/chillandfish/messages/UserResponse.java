@@ -9,31 +9,42 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import java.util.List;
 
+@SuppressWarnings({"FieldMayBeFinal", "CanBeFinal"})
 public class UserResponse {
+    @SuppressWarnings("FieldCanBeLocal")
     @JsonProperty("userId")
     private Long id;
+    @SuppressWarnings("FieldCanBeLocal")
     @JsonProperty("firstName")
     private String firstName;
+    @SuppressWarnings("FieldCanBeLocal")
     @JsonProperty("lastName")
     private String lastName;
+    @SuppressWarnings("FieldCanBeLocal")
     @JsonProperty("displayName")
     private String displayName;
 
+    @SuppressWarnings("FieldCanBeLocal")
     @JsonProperty("loginName")
     private String loginName;
+    @SuppressWarnings("FieldCanBeLocal")
     @JsonProperty("active")
     private Boolean active;
+    @SuppressWarnings("FieldCanBeLocal")
     @JsonProperty("address")
     @JsonSerialize(as = Address.class)
     private Address address;
 
+    @SuppressWarnings("FieldCanBeLocal")
     @JsonProperty("contactData")
     @JsonSerialize(as = ContactData.class)
     private ContactData contactData;
 
+    @SuppressWarnings("FieldCanBeLocal")
     @JsonProperty("roles")
     private List<Role> roles;
 
+    @SuppressWarnings("FieldCanBeLocal")
     @JsonProperty("financialData")
     @JsonSerialize(as = FinancialData.class)
     private FinancialData financialData;

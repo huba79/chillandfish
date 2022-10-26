@@ -16,11 +16,11 @@ import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.validation.constraints.NotNull;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+@SuppressWarnings("ConstantConditions")
 @Component
 public class JwtRequestFilter extends OncePerRequestFilter {
     @Autowired
@@ -28,7 +28,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     @Autowired
     private JwtTokenUtil jwtTokenUtil;
 
-    Logger logger = Logger.getLogger(JwtRequestFilter.class.getName());
+    final Logger logger = Logger.getLogger(JwtRequestFilter.class.getName());
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull FilterChain chain)
