@@ -17,12 +17,12 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 @Component
-public class AuthenticationErrorHandler implements AuthenticationEntryPoint, Serializable {
+public class AuthenticationErrorHandlerFilter implements AuthenticationEntryPoint, Serializable {
 
     @Serial
     private static final long serialVersionUID = -7858869558953243875L;
 
-    private final Logger logger = Logger.getLogger(AuthenticationErrorHandler.class.getName());
+    private final Logger logger = Logger.getLogger(AuthenticationErrorHandlerFilter.class.getName());
 
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response,

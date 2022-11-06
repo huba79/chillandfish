@@ -2,6 +2,7 @@ package com.digitalways.chillandfish.services;
 
 import com.digitalways.chillandfish.messages.RegistrationMessage;
 import com.digitalways.chillandfish.messages.RegistrationResponse;
+import com.digitalways.chillandfish.messages.UserMessage;
 import com.digitalways.chillandfish.messages.UserResponse;
 import com.digitalways.chillandfish.persistence.ContactData;
 import com.digitalways.chillandfish.persistence.FinancialData;
@@ -124,4 +125,7 @@ public class UsersService implements Converter<Role>, UserDetailsService {
         return userRepo.findActiveUserByLoginname(username).orElseThrow(() -> new NoSuchElementException("Bad credentials!"));
     }
 
+    public void saveUser(UserMessage updatedUserMessage) {
+
+    }
 }

@@ -5,11 +5,15 @@ import com.digitalways.chillandfish.messages.AuthenticationMessage;
 import com.digitalways.chillandfish.persistence.User;
 import com.digitalways.chillandfish.security.JwtTokenUtil;
 import com.digitalways.chillandfish.services.UsersService;
+import io.jsonwebtoken.impl.DefaultClaims;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.*;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -40,6 +44,24 @@ public class JwtAuthenticationController {
         logger.log(Level.INFO,"Token generated: "+token+" , returning response...");
 
         return ResponseEntity.ok(new AuthenticationJwtResponse(token));
+    }
+
+    @RequestMapping(value = "/refreshtoken", method = RequestMethod.GET)
+    public ResponseEntity<?> refreshtoken(HttpServletRequest request) throws Exception {
+        // From the HttpRequest get the claims
+        DefaultClaims claims = (io.jsonwebtoken.impl.DefaultClaims) request.getAttribute("claims");
+
+        Map<String, Object> expectedMap = getMapFromIoJsonwebtokenClaims(claims);
+        String token = jwtTokenUtil.doGenerateRefreshToken(expectedMap, expectedMap.get("sub").toString());
+        return ResponseEntity.ok(new AuthenticationJwtResponse(token));
+    }
+
+    public Map<String, Object> getMapFromIoJsonwebtokenClaims(DefaultClaims claims) {
+        Map<String, Object> expectedMap = new HashMap<String, Object>();
+        for (Map.Entry<String, Object> entry : claims.entrySet()) {
+            expectedMap.put(entry.getKey(), entry.getValue());
+        }
+        return expectedMap;
     }
 
     private void authenticate(String username, String password) throws Exception {

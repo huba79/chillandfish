@@ -3,6 +3,7 @@ package com.digitalways.chillandfish.rest;
 import com.digitalways.chillandfish.api.ApiResponse;
 import com.digitalways.chillandfish.messages.DummyMessage;
 import com.digitalways.chillandfish.messages.DummyResponse;
+import com.digitalways.chillandfish.messages.UserMessage;
 import com.digitalways.chillandfish.messages.UserResponse;
 import com.digitalways.chillandfish.persistence.User;
 import com.digitalways.chillandfish.security.exceptions.UserNotFoundException;
@@ -50,4 +51,10 @@ public class UserController {
                                     HttpStatus.OK);
     }
 
+    @RequestMapping(value = "protected/users/{id}", method = RequestMethod.PUT)
+    @PreAuthorize("hasAnyRole('ROLE_ADMINS','ROLE_USERS')")
+    ResponseEntity<Void> updateUser(@PathVariable Long id, @RequestBody UserMessage updatedUserMessage){
+        usersService.saveUser(updatedUserMessage);
+        return  ResponseEntity.ok().build();
+    }
 }

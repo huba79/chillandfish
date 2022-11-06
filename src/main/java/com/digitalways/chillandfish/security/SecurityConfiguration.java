@@ -27,15 +27,14 @@ import java.util.logging.Logger;
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfiguration {
     @Autowired
-    AuthenticationErrorHandler authenticationErrorHandler;
+    AuthenticationErrorHandlerFilter authenticationErrorHandlerFilter;
     @Autowired
     JwtRequestFilter jwtRequestFilter;
 
     final Logger logger = Logger.getLogger(SecurityConfiguration.class.getName());
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        logger.log(Level.INFO, "Entering FilterChain. ");
-
+        logger.log(Level.INFO, "Configuring FilterChain. ");
         http
             .csrf().disable()
 //      set up csrf protection
@@ -44,13 +43,11 @@ public class SecurityConfiguration {
                 .antMatchers("/public/**")
                 .permitAll()
             .and()
-                .exceptionHandling().authenticationEntryPoint(authenticationErrorHandler)
+                .exceptionHandling().authenticationEntryPoint(authenticationErrorHandlerFilter)
             .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             .and()
-                .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class)
-
-                ;
+                .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
 
         logger.log(Level.INFO, "Exiting FilterChain. ");
         return http.build();
